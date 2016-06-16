@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   version: "0.0.1"
-  title: Hello World App
+  title: ART Search
 # during dev, should point to your local machine
 host: localhost:10010
 # basePath prefixes all resource paths 
@@ -18,25 +18,25 @@ consumes:
 produces:
   - application/json
 paths:
-  /hello:
+  /art:
     # binds a127 app logic to a route
-    x-swagger-router-controller: hello_world
+    x-swagger-router-controller: art
     get:
-      description: Returns 'Hello' to the caller
+      description: Returns links to some art
       # used as the method name of the controller
-      operationId: hello
+      operationId: getArt
       parameters:
-        - name: name
+        - name: searchTerm
           in: query
-          description: The name of the person to whom to say hello
-          required: false
+          description: The type of art to search
+          required: true
           type: string
       responses:
         "200":
           description: Success
           schema:
             # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
+            $ref: "#/definitions/GetArtResponse"
         # responses may fall through to errors
         default:
           description: Error
@@ -46,12 +46,20 @@ paths:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
 definitions:
-  HelloWorldResponse:
+  GetArtResponse:
     required:
-      - message
+      - art
     properties:
-      message:
-        type: string
+      art:
+        type: array
+        items:
+          type: object
+          required: ['id']
+          properties: 
+            id: 
+              type: string
+            url:
+              type: string
   ErrorResponse:
     required:
       - message
