@@ -6,6 +6,12 @@ var server = require('../../../app')
 var api = supertest(server)
 var expect = chai.expect
 
+describe('something', function () {
+  it('should be true', function () {
+    expect(true).to.be.true
+  })
+})
+
 describe('/art', function () {
   describe('get', function () {
     it('should respond with 200 Success', function (done) {
