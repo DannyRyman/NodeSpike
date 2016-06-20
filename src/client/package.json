@@ -9,6 +9,8 @@
   "main": "app.js",
   "dependencies": {
     "express": "^4.12.3",
+    "oauth": "^0.9.14",
+    "ramda": "^0.21.0",
     "swagger-express-mw": "^0.1.0"
   },
   "devDependencies": {

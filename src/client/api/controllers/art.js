@@ -1,13 +1,19 @@
+var getArtBySearchTerm = require('../queries/getArtBySearchTerm')
+
 module.exports = {
   getArt: getArt
 }
 
-function getArt (req, res) {
+function getArt (req, res, next) {
   var searchTerm = req.query.searchTerm
-  if (searchTerm === 'error') {
-    res.status(500).json('An error occurred')
-  } else {
-    var data = [{id: 'image1', url: 'http://image1.jpg'}]
-    res.json(data)
-  }
+
+  getArtBySearchTerm(searchTerm, function (err, results) {
+    if (err) {
+      next(err)
+    } else {
+      // todo transform the results
+      console.log(JSON.stringify(results))
+      res.json(results)
+    }
+  })
 }

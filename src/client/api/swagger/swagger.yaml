@@ -54,7 +54,7 @@ definitions:
         type: array
         items:
           type: object
-          required: ['id']
+          required: ['id', 'url']
           properties: 
             id: 
               type: string
