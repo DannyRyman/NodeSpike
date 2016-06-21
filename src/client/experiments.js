@@ -1,51 +1,52 @@
-const oAuth = require('oauth')
-const key = '4833'
-const secret = '5d6351cd2ccf7f5a156c268cce60e85f'
-const request = require('request')
+const R = require('ramda')
 
-function ResponseError (res) {
-  this.name = 'ResponseError'
-  this.message = 'An error occurred during an api request'
-  this.stack = (new Error()).stack
-  this.response = res
+let sample = { has_more: true,
+  next_offset: 10,
+  results: 
+   [ { deviationid: 'DABD455F-E58F-164B-7306-D640C44CEFEC',
+       printid: null,
+       url: 'http://hapuriainen.deviantart.com/art/Disney-Girls-dress-up-354859996',
+       title: 'Disney Girls dress up',
+       category: 'Interactive',
+       category_path: 'flash/interactive',
+       is_favourited: false,
+       is_deleted: false,
+       author: [Object],
+       stats: [Object],
+       published_time: 1361128962,
+       allows_comments: true,
+       content: [Object],
+       thumbs: [Object],
+       flash: [Object],
+       is_mature: false,
+       is_downloadable: true,
+       download_filesize: 1210465 },
+     { deviationid: '65C9D1C7-EEA4-129E-3A06-66B5E761BAC9',
+       printid: null,
+       url: 'http://chippyfish.deviantart.com/art/Tuna-And-Yo-Pixels-354154704',
+       title: 'Tuna And Yo Pixels',
+       category: 'Non-Isometric',
+       category_path: 'digitalart/pixelart/characters/noniso',
+       is_favourited: false,
+       is_deleted: false,
+       author: [Object],
+       stats: [Object],
+       published_time: 1360807728,
+       allows_comments: true,
+       content: [Object],
+       thumbs: [Object],
+       is_mature: false,
+       is_downloadable: true,
+       download_filesize: 126561 }]
 }
 
-ResponseError.prototype = Object.create(Error.prototype)
-ResponseError.prototype.constructor = ResponseError
-
-function getAuthToken (callback) {
-  let oauth2 = new oAuth.OAuth2(key, secret, 'https://www.deviantart.com/', null, 'oauth2/token', null)
-  oauth2.getOAuthAccessToken('',
-    {'grant_type': 'client_credentials'},
-    function (e, accessToken) {
-      callback(e, accessToken)
-    })
-}
-
-function getArt (searchTerm, callback) {
-  function requestArt (e, bearerToken) {
-    console.log('todo use the bearer token to make call: ', bearerToken)
-    request({
-      'url': 'https://www.deviantart.com/api/v1/oauth2/browse/tags?tag=frog&access_token=${bearerToken}',
-      'headers': {
-        'User-Agent': 'test art client',
-        'Authorization': 'bearer ' + bearerToken
-      }
-    }, function (e, res) {
-      if (!e && res.statusCode >= 400) {
-        e = new ResponseError(res)
-      }
-      const data = e ? null : JSON.parse(res.body)
-      callback(e, data)
-    })
+var summateResult = x => {
+  return {
+    'id': x.deviationid,
+    'url': x.url
   }
-  getAuthToken(requestArt)
 }
 
-getArt('frog', function (e, data) {
-  if (e) {
-    console.log('an error occurred: ', e)
-  } else {
-    console.log(data)
-  }
-})
+const summerisedResults = R.map(summateResult, sample.results)
+console.log(JSON.stringify(summerisedResults))
+
