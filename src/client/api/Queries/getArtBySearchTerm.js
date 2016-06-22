@@ -1,22 +1,15 @@
 const R = require('ramda')
 const getArtBySearchTermDA = require('./DeviantArt/getArtBySearchTerm')
 
-function getArtBySearchTerm (searchTerm, callback) {
-  var summarizeResult = x => {
-    return {
-      'id': x.deviationid,
-      'url': x.url
-    }
+const summarizeResult = originalResult => {
+  return {
+    'id': originalResult.deviationid,
+    'url': originalResult.url
   }
-
-  getArtBySearchTermDA(searchTerm, function (e, data) {
-    if (e) {
-      callback(e, null)
-    } else {
-      const summerisedResults = R.map(summarizeResult, data.results)
-      callback(null, summerisedResults)
-    }
-  })
 }
+
+const summarizeResults = R.pipe(R.prop('results'), R.map((summarizeResult)))
+
+const getArtBySearchTerm = R.pipe(getArtBySearchTermDA, R.map(summarizeResults))
 
 module.exports = getArtBySearchTerm
