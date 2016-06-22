@@ -23,7 +23,7 @@ const setBearerTokenOnRequestOptions = (requestOptions) => R.partial(R.assocPath
 
 const doDeviantQuery = (options) => R.pipe(
   getAuthToken,
-  R.map(setBearerTokenOnRequestOptions(options)),
+  R.lift(setBearerTokenOnRequestOptions(options)),
   R.chain(doQuery)
 )()
 

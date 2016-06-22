@@ -10,6 +10,6 @@ const summarizeResult = originalResult => {
 
 const summarizeResults = R.pipe(R.prop('results'), R.map((summarizeResult)))
 
-const getArtBySearchTerm = R.pipe(getArtBySearchTermDA, R.map(summarizeResults))
+const getArtBySearchTerm = R.pipe(getArtBySearchTermDA, R.lift(summarizeResults))
 
 module.exports = getArtBySearchTerm
